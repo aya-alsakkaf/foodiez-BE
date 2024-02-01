@@ -1,6 +1,7 @@
+const { model, Schema } = require("mongoose");
 const mongoose = require("mongoose");
 
-const RecipesSchema = new mongoose.Schema({
+const RecipesSchema = new Schema({
   title: String,
   cookTime: String,
   category: [
@@ -25,4 +26,4 @@ const RecipesSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Recipes", RecipesSchema);
+module.exports = model("Recipes", RecipesSchema);
