@@ -1,11 +1,16 @@
 const express = require("express");
 const recipesRouter = express.Router();
-
-const {getAllRecipes} = require("./recipes.controller");
-const passport  = require("passport");
+const multer = require("multer");
+const upload = require("../../middleware/multer.js");
+const {
+  getAllRecipes,
+  addRecipe,
+  recipeById,
+} = require("./recipes.controller");
+const passport = require("passport");
 
 recipesRouter.get("/recipes", getAllRecipes);
-// userRouter.post("/login", passport.authenticate("local", {session: false}) , login);
-// userRouter.get("/users", getAllUsers);
+recipesRouter.post("/addRecipe", upload.single("image"), addRecipe);
+recipesRouter.get("/recipeByID/:_id", recipeById);
 
 module.exports = recipesRouter;

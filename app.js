@@ -8,6 +8,7 @@ const userRouter = require("./api/users/users.routes");
 const cors = require("cors");
 const recipesRouter = require("./api/recipes/recipes.routes");
 const categoriesRouter = require("./api/categories/categories.routes");
+const ingridentsRouter = require("./api/ingridents/ingridents.routes");
 //init
 const app = express();
 const PORT = 8001;
@@ -19,6 +20,7 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(userRouter);
 app.use(recipesRouter);
+app.use(ingridentsRouter);
 app.use(categoriesRouter);
 app.use(passport.initialize());
 passport.use("local", localStrategy);

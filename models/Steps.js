@@ -1,11 +1,11 @@
-const { Model, Schema } = require("mongoose");
+const { model, Schema } = require("mongoose");
 
 const StepsSchema = new Schema({
   recipe: {
     type: Schema.Types.ObjectId,
     ref: "Recipes",
   },
-  steps: [String],
+  step: String,
 });
 
-module.exports = Model("Steps", CategorySchema);
+module.exports = model("Steps", StepsSchema);
