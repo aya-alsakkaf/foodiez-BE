@@ -52,8 +52,27 @@ const login = async (req, res, next) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
+    const users = await User.find().populate("recipes");
     return res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUserById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params._id).populate("recipes");
+
+    return res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUserRecipes = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params._id).populate("recipes");
+    return res.status(200).json(user.recipes);
   } catch (error) {
     next(error);
   }
@@ -62,4 +81,6 @@ module.exports = {
   register,
   login,
   getAllUsers,
+  getUserById,
+  getUserRecipes,
 };

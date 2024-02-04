@@ -6,7 +6,10 @@ const Category = require("../../models/Category");
 
 const getAllRecipes = async (req, res, next) => {
   try {
-    const recipes = await Recipes.find();
+    const recipes = await Recipes.find()
+      .populate("ingridents", "ingrident")
+      .populate("steps", "step")
+      .populate("category", "categoryName");
     return res.status(200).json(recipes);
   } catch (error) {
     next(error);
@@ -45,7 +48,6 @@ const addRecipe = async (req, res, next) => {
       return { step: step };
     });
 
-    console.log(req.body.ingredients);
     const ingredients = await Ingrident.insertMany(req.body.ingredients);
     console.log(ingredients);
     const steps = await Steps.insertMany(req.body.steps);
@@ -54,6 +56,12 @@ const addRecipe = async (req, res, next) => {
     req.body.steps = steps.map((step) => step._id);
 
     const recipe = await Recipes.create(req.body);
+    const updatedRecipe = await Recipes.findByIdAndUpdate(recipe._id, {
+      user: req.user._id,
+    });
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { recipes: recipe._id },
+    });
 
     await Ingrident.updateMany(
       {
@@ -67,10 +75,8 @@ const addRecipe = async (req, res, next) => {
       },
       { $push: { recipe: recipe._id } }
     );
-    // await ingridents.updateMany({ $push: { recipe: recipe._id } });
-    // await steps.updateMany({ $push: { recipe: recipe._id } });
 
-    return res.status(201).json(recipe);
+    return res.status(201).json(updatedRecipe);
   } catch (error) {
     next(error);
   }
